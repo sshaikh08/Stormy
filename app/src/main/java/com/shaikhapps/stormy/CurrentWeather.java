@@ -1,5 +1,9 @@
 package com.shaikhapps.stormy;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
  * Created by Shariq on 1/29/2015.
  */
@@ -7,6 +11,10 @@ public class CurrentWeather {
     private String mIcon;
     private long mTime;
     private double mTemperature;
+    private double mHumidity;
+    private double mPrecipChance;
+    private String mSummary;
+    private String mTimeZone;
 
     public String getIcon() {
         return mIcon;
@@ -24,6 +32,15 @@ public class CurrentWeather {
         mTime = time;
     }
 
+    public String getFormattedTime(){
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
+        formatter.setTimeZone(TimeZone.getTimeZone(getmTimeZone()));
+        Date dateTime = new Date(getTime() * 1000);
+        String timeString = formatter.format(dateTime);
+
+        return timeString;
+    }
+
     public double getTemperature() {
         return mTemperature;
     }
@@ -32,12 +49,20 @@ public class CurrentWeather {
         mTemperature = temperature;
     }
 
-    public double getPercipChance() {
-        return mPercipChance;
+    public double getHumidity() {
+        return mHumidity;
     }
 
-    public void setPercipChance(double percipChance) {
-        mPercipChance = percipChance;
+    public void setHumidity(double humidity) {
+        mHumidity = humidity;
+    }
+
+    public double getPrecipChance() {
+        return mPrecipChance;
+    }
+
+    public void setPrecipChance(double precipChance) {
+        mPrecipChance = precipChance;
     }
 
     public String getSummary() {
@@ -48,6 +73,11 @@ public class CurrentWeather {
         mSummary = summary;
     }
 
-    private double mPercipChance;
-    private String mSummary;
+    public String getmTimeZone() {
+        return mTimeZone;
+    }
+
+    public void setmTimeZone(String mTimeZone) {
+        this.mTimeZone = mTimeZone;
+    }
 }
