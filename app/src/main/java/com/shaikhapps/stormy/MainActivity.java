@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
@@ -22,6 +24,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -29,10 +34,19 @@ public class MainActivity extends ActionBarActivity {
 
     private CurrentWeather mCurrentWeather;
 
+    @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
+    @InjectView(R.id.timeLabel) TextView mTimeLabel;
+    @InjectView(R.id.humidityLabel) TextView mHumidityLabel;
+    @InjectView(R.id.precipLabel) TextView mPrecipLabel;
+    @InjectView(R.id.summaryLabel) TextView mSummaryLabel;
+    @InjectView(R.id.iconImageView) ImageView mIconImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
+
 
         String apiKey = "18ed83d6740456486ddd55332b57b8ad";
         double latitude = 37.8267;
@@ -61,6 +75,13 @@ public class MainActivity extends ActionBarActivity {
                         Log.v(TAG, response.body().string());
                         if (response.isSuccessful()) {
                             mCurrentWeather = geteCurrentDetails(jsonData);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateDisplay();
+                                }
+                            });
+
                         } else {
                             alertUserAboutError();
                         }
@@ -79,6 +100,12 @@ public class MainActivity extends ActionBarActivity {
         }
 
         Log.d(TAG, "Main UI code is running!");
+    }
+
+    private void updateDisplay() {
+        mTemperatureLabel.setText(mCurrentWeather.getTemperature() + "");
+        mTimeLabel.setText("At " + mCurrentWeather.getFormattedTime() + " it will be");
+        mHumidityLabel.set
     }
 
     private CurrentWeather geteCurrentDetails(String jsonData) throws JSONException {
